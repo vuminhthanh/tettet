@@ -523,30 +523,32 @@
         <div class="loading-init__header">Loading</div>
         <div class="loading-init__status">Assembling Shells</div>
     </div>
-
     <div class="stage-container remove">
         <div class="canvas-container">
             <canvas id="trails-canvas"></canvas>
             <canvas id="main-canvas"></canvas>
             <div class="container" style="position: relative;top: 180px;">
-                <h1 id="headline">Sắp Tết rồi!!! Chỉ còn...</h1>
+                <h1 id="headline" style="font-size: 24px">Sắp Tết rồi!!! Chỉ còn...</h1>
+                <h2 id="nyan-btn" style="color: white; margin-bottom: 30px;font-size: 18px">Bấm vào đây để nghe nhạc </h2>
+                <audio id="nyan" src="NgayTetQueEm-LuuAnhLoanBeMaiVy-5850780.mp3" preload="metadata" type="audio/mpeg">
+                </audio>
                 <div id="countdown">
                     <div class="row">
                         <div class="col-md-3 col-xs-3">
-                            <li><span id="days"></span>days</li>
+                            <li><span id="days"></span>Ngày</li>
                         </div>
                         <div class="col-md-3 col-xs-3">
-                            <li><span id="hours"></span>Hours</li>
+                            <li><span id="hours"></span>Giờ</li>
                         </div>
                         <div class="col-md-3 col-xs-3">
-                            <li><span id="minutes"></span>Minutes</li>
+                            <li><span id="minutes"></span>Phút</li>
                         </div>
                         <div class="col-md-3 col-xs-3">
-                            <li><span id="seconds"></span>Seconds</li>
+                            <li><span id="seconds"></span>Giây</li>
                         </div>
                     </div>
                 </div>
-                <div style="font-size:50px;color: white">Tân Sửu 2021</div>
+                <div style="font-size:50px;color: white">Quý Mão 2023</div>
                 <a style="font-size:30px" href="https://www.facebook.com/thanh.vuminh.750/">Vũ Minh Thành</a>
             </div>
 
@@ -655,7 +657,6 @@
             </symbol>
         </svg>
     </div>
-
     <!-- App -->
     <!-- partial -->
     <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/fscreen%401.0.1.js'></script>
@@ -665,13 +666,53 @@
 
 
 <script type="text/javascript">
+    var nyan = document.getElementById('nyan');
+    var nyanBtn = document.getElementById('nyan-btn');
+
+    function playPause(song){
+        if (song.paused && song.currentTime >= 0 && !song.ended) {
+            song.play();
+        } else {
+            song.pause();
+        }
+    }
+
+    function reset(btn, song){
+        if(btn.classList.contains('playing')){
+            btn.classList.toggle('playing');
+        }
+        song.pause();
+        song.currentTime = 0;
+    }
+
+    function progress(btn, song){
+        setTimeout(function(){
+            var end = song.duration;
+            var current = song.currentTime;
+            var percent = current/(end/100);
+            //check if song is at the end
+            if(current==end){
+                reset(btn, song);
+            }
+            //set inset box shadow
+            btn.style.boxShadow = "inset " + btn.offsetWidth * (percent/100) + "px 0px 0px 0px rgba(0,0,0,0.125)"
+            //call function again
+            progress(btn, song);
+        }, 133.7);
+    }
+
+    nyanBtn.addEventListener('click', function(){
+        nyanBtn.classList.toggle('playing');
+        playPause(nyan);
+        progress(nyanBtn, nyan);
+    });
     (function () {
         const second = 1000,
             minute = second * 60,
             hour = minute * 60,
             day = hour * 24;
 
-        let birthday = "February 12, 2021 00:00:00",
+        let birthday = "January 22, 2023 00:00:00",
             countDown = new Date(birthday).getTime(),
             x = setInterval(function () {
 
@@ -689,7 +730,7 @@
                         countdown = document.getElementById("countdown"),
                         content = document.getElementById("content");
 
-                    headline.innerText = "It's my birthday!";
+                    headline.innerText = "Chúc mừng năm mới";
                     countdown.style.display = "none";
                     content.style.display = "block";
 
